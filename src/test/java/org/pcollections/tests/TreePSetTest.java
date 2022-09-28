@@ -26,8 +26,11 @@ import java.util.NavigableSet;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.SortedSet;
+import java.util.Spliterator;
 import java.util.TreeSet;
 import java.util.stream.Stream;
+import java.util.stream.Collectors;
+
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -331,6 +334,19 @@ public class TreePSetTest extends TestCase {
       assertThrows(UnsupportedOperationException.class, () -> iterator.remove());
     }
     assertThrows(NoSuchElementException.class, () -> iterator.next());
+  }
+
+  public void testSpliterator() {
+    TreePSet<Integer> set = TreePSet.of(1, 2, 3, 4);
+    Spliterator<Integer> spliterator = set.spliterator();
+
+    assertTrue(spliterator.hasCharacteristics(Spliterator.IMMUTABLE));
+    assertTrue(spliterator.hasCharacteristics(Spliterator.DISTINCT));
+    assertTrue(spliterator.hasCharacteristics(Spliterator.ORDERED));
+    assertTrue(spliterator.hasCharacteristics(Spliterator.SORTED));
+    assertEquals(4, spliterator.getExactSizeIfKnown());
+
+    set.stream().sorted().collect(Collectors.toList());
   }
 
   /**

@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Spliterator;
+import java.util.Spliterators;
 
 /**
  * Like {@link PSet} but preserves insertion order. Persistent equivalent of {@link LinkedHashSet}.
@@ -85,6 +87,11 @@ public class OrderedPSet<E> extends AbstractUnmodifiableSet<E> implements PSet<E
   @Override
   public Iterator<E> iterator() {
     return elements.values().iterator();
+  }
+
+  @Override
+  public Spliterator<E> spliterator() {
+    return Spliterators.spliterator(this, Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT);
   }
 
   @Override

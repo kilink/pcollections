@@ -8,8 +8,12 @@ package org.pcollections;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.NavigableSet;
 import java.util.NoSuchElementException;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.Consumer;
 
 /**
  * An immutable, persistent set of distinct, non-null elements, with elements arranged in sorted
@@ -175,5 +179,29 @@ public interface PSortedSet<E> extends PSet<E>, NavigableSet<E> {
   @Override
   default E pollLast() {
     throw new UnsupportedOperationException();
+  }
+
+  @Override
+  default Spliterator<E> spliterator() {
+    int characteristics = Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.SORTED | Spliterator.DISTINCT | Spliterator.SIZED;
+    return new Spliterators.AbstractSpliterator<E>(size(), characteristics) {
+      private final Iterator<E> iterator = iterator();
+
+      @Override
+      public boolean tryAdvance(Consumer<? super E> action) {
+        if (iterator.hasNext()) {
+          action.accept(iterator.next());
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      @Override
+      public Comparator<? super E> getComparator() {
+        Comparator<? super E> c = comparator();
+        return c == Comparator.naturalOrder() ? null : c;
+      }
+    };
   }
 }

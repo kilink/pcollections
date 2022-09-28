@@ -12,7 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Spliterator;
+
 import junit.framework.TestCase;
+import org.pcollections.HashPMap;
 import org.pcollections.HashTreePMap;
 import org.pcollections.PMap;
 
@@ -87,6 +90,16 @@ public class HashPMapTest extends TestCase {
   public void testIterator() {
     UtilityTest.iteratorExceptions(HashTreePMap.empty().entrySet().iterator());
     UtilityTest.iteratorExceptions(HashTreePMap.singleton(10, "test").entrySet().iterator());
+  }
+
+  public void testSpliterator() {
+    HashPMap<String, String> map = HashTreePMap.<String, String>empty().plus("k1", "v1").plus("k2", "v2").plus("k3", "v3");
+    Spliterator<Map.Entry<String, String>> spliterator = map.entrySet().spliterator();
+
+    assertTrue(spliterator.hasCharacteristics(Spliterator.IMMUTABLE));
+    assertTrue(spliterator.hasCharacteristics(Spliterator.ORDERED));
+    assertTrue(spliterator.hasCharacteristics(Spliterator.DISTINCT));
+    assertEquals(3, spliterator.getExactSizeIfKnown());
   }
 
   public void testSingleton() {

@@ -12,6 +12,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 
 /**
  * A persistent map from non-null keys to non-null values.
@@ -72,6 +74,12 @@ public final class HashPMap<K, V> extends AbstractUnmodifiableMap<K, V>
             public Iterator<Entry<K, V>> iterator() {
               return new SequenceIterator<Entry<K, V>>(intMap.values().iterator());
             }
+
+            @Override
+            public Spliterator<Entry<K, V>> spliterator() {
+              return Spliterators.spliterator(this, Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.ORDERED);
+            }
+
             // OVERRIDDEN METHODS OF AbstractSet //
             @Override
             public boolean contains(final Object e) {

@@ -9,6 +9,7 @@ package org.pcollections;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Spliterator;
 
 /**
  * A map-backed persistent set.
@@ -65,6 +66,11 @@ public final class MapPSet<E> extends AbstractUnmodifiableSet<E> implements PSet
   @Override
   public Iterator<E> iterator() {
     return map.keySet().iterator();
+  }
+
+  @Override
+  public Spliterator<E> spliterator() {
+    return map.keySet().spliterator();
   }
 
   @Override

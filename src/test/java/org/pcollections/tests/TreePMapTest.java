@@ -29,6 +29,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.Spliterator;
 import java.util.TreeMap;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -436,6 +437,15 @@ public class TreePMapTest extends TestCase {
     assertEquivalentState(
         treeMapOf(STRINGIFY, 1, 2, 3, 4).descendingMap().navigableKeySet(),
         treePMapOf(STRINGIFY, 1, 2, 3, 4).descendingMap().keySet());
+  }
+
+  public void testSpliterator() {
+    TreePMap<Integer, String> map = TreePMap.from(treeMapOf(STRINGIFY, 1, 2, 3, 4));
+    Spliterator<Map.Entry<Integer, String>> spliterator = map.entrySet().spliterator();
+
+    assertTrue(spliterator.hasCharacteristics(Spliterator.IMMUTABLE));
+    assertTrue(spliterator.hasCharacteristics(Spliterator.ORDERED));
+    assertEquals(4, spliterator.getExactSizeIfKnown());
   }
 
   /**

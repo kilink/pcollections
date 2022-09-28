@@ -7,6 +7,8 @@
 package org.pcollections;
 
 import java.util.Collection;
+import java.util.Spliterator;
+import java.util.Spliterators;
 
 /**
  * An unordered collection allowing duplicate elements.
@@ -23,4 +25,9 @@ public interface PBag<E> extends PCollection<E> {
   public PBag<E> minus(Object e);
   // @Override
   public PBag<E> minusAll(Collection<?> list);
+
+  @Override
+  default Spliterator<E> spliterator() {
+    return Spliterators.spliterator(this, Spliterator.IMMUTABLE | Spliterator.ORDERED);
+  }
 }

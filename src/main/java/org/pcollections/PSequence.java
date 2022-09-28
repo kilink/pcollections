@@ -8,6 +8,8 @@ package org.pcollections;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Spliterator;
+import java.util.Spliterators;
 
 /**
  * An immutable, persistent indexed collection.
@@ -75,4 +77,9 @@ public interface PSequence<E> extends PCollection<E>, List<E> {
 
   @Deprecated
   E remove(int index);
+
+  @Override
+  default Spliterator<E> spliterator() {
+    return Spliterators.spliterator(this, Spliterator.IMMUTABLE | Spliterator.ORDERED);
+  }
 }

@@ -9,6 +9,8 @@ package org.pcollections;
 
 import java.util.Collection;
 import java.util.Queue;
+import java.util.Spliterator;
+import java.util.Spliterators;
 
 /**
  * A persistent queue.
@@ -36,4 +38,9 @@ public interface PQueue<E> extends PCollection<E>, Queue<E> {
 
   @Deprecated
   E remove();
+
+  @Override
+  default Spliterator<E> spliterator() {
+    return Spliterators.spliterator(this, Spliterator.IMMUTABLE | Spliterator.ORDERED);
+  }
 }

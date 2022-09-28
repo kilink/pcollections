@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
+import java.util.Spliterator;
+
 import junit.framework.TestCase;
 import org.pcollections.ConsPStack;
 import org.pcollections.Empty;
@@ -135,6 +137,15 @@ public class ConsPStackTest extends TestCase {
       assertEquals(i, it.previousIndex());
       i++;
     }
+  }
+
+  public void testSpliterator() {
+    PStack<String> stack = Empty.<String>stack().plus("d").plus("c").plus("b").plus("a");
+    Spliterator<String> spliterator =  stack.spliterator();
+
+    assertTrue(spliterator.hasCharacteristics(Spliterator.IMMUTABLE));
+    assertTrue(spliterator.hasCharacteristics(Spliterator.ORDERED));
+    assertEquals(4, spliterator.getExactSizeIfKnown());
   }
 
   public void testSubListStackOverflowRegression() {

@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
@@ -358,6 +360,11 @@ public final class TreePMap<K, V> extends AbstractUnmodifiableMap<K, V>
       @Override
       public Iterator<Entry<K, V>> iterator() {
         return TreePMap.this.tree.entryIterator(TreePMap.this.isLeftToRight);
+      }
+
+      @Override
+      public Spliterator<Entry<K, V>> spliterator() {
+        return Spliterators.spliterator(this, Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT);
       }
 
       @Override

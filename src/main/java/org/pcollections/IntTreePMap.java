@@ -12,6 +12,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 
 /**
  * An efficient persistent map from integer keys to non-null values.
@@ -127,7 +129,14 @@ public final class IntTreePMap<V> extends AbstractUnmodifiableMap<Integer, V>
             public Iterator<Entry<Integer, V>> iterator() {
               return root.iterator();
             }
+
+            @Override
+            public Spliterator<Entry<Integer, V>> spliterator() {
+              return Spliterators.spliterator(this, Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.ORDERED);
+            }
+
             // OVERRIDDEN METHODS OF AbstractSet //
+
             @Override
             public boolean contains(final Object e) {
               if (!(e instanceof Entry)) return false;

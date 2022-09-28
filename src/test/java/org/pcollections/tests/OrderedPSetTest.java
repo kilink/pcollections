@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.Spliterator;
+
 import junit.framework.TestCase;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -73,6 +75,16 @@ public class OrderedPSetTest extends TestCase {
   public void testIterator() {
     UtilityTest.iteratorExceptions(Empty.orderedSet().iterator());
     UtilityTest.iteratorExceptions(OrderedPSet.singleton(10).iterator());
+  }
+
+  public void testSpliterator() {
+    OrderedPSet<String> pset = OrderedPSet.singleton("a").plus("b").plus("c").plus("d");
+    Spliterator<String> spliterator = pset.spliterator();
+
+    assertTrue(spliterator.hasCharacteristics(Spliterator.ORDERED));
+    assertTrue(spliterator.hasCharacteristics(Spliterator.IMMUTABLE));
+    assertTrue(spliterator.hasCharacteristics(Spliterator.DISTINCT));
+    assertEquals(4, spliterator.getExactSizeIfKnown());
   }
 
   public void testUnmodifiable() {

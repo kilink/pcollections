@@ -9,6 +9,8 @@ package org.pcollections.tests;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Spliterator;
+
 import junit.framework.TestCase;
 import org.pcollections.PVector;
 import org.pcollections.TreePVector;
@@ -92,6 +94,15 @@ public class TreePVectorTest extends TestCase {
   public void testIterator() {
     UtilityTest.iteratorExceptions(TreePVector.empty().iterator());
     UtilityTest.iteratorExceptions(TreePVector.singleton(10).iterator());
+  }
+
+  public void testSpliterator() {
+    TreePVector<String> pvec = TreePVector.<String>empty().plus("a").plus("b").plus("c");
+    Spliterator<String> spliterator = pvec.spliterator();
+
+    assertTrue(spliterator.hasCharacteristics(Spliterator.IMMUTABLE));
+    assertTrue(spliterator.hasCharacteristics(Spliterator.ORDERED));
+    assertEquals(3, spliterator.getExactSizeIfKnown());
   }
 
   public void testSubListStackOverflowRegression() {
